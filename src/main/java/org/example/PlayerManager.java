@@ -1,21 +1,23 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+
 
 public class PlayerManager {
     private List<Player> allPlayers;
     static PlayerManager pm = null;
+    public List<Player> allPlayersSortByScore = new ArrayList<>();
 
-    public  static PlayerManager getInstance(){
+    public static PlayerManager getInstance() {
         if (pm == null)
             pm = new PlayerManager();
         return pm;
     }
 
-    private  PlayerManager() {
-
+    private PlayerManager() {
         allPlayers = new ArrayList<Player>();
     }
 
@@ -43,46 +45,36 @@ public class PlayerManager {
 
     }
 
-    public List<Player> getPlayersByLeague(League league){
+    public List<Player> getPlayersByLeague(League league) {
         List<Player> playerList = new LinkedList<>();
-        for (Player player : allPlayers){
+        for (Player player : allPlayers) {
             if (player.getLeague().equals(league))
                 playerList.add(player);
         }
         return playerList;
     }
 
+    public List<Player> getAllPlayersSortByScore(List<Player> player) {
+        for (int i = 0; i < player.size() ;i++){
+            allPlayersSortByScore.add(player.get(i));}
+
+        allPlayersSortByScore.sort(new ComparePlayers());
+
+        return allPlayersSortByScore;
+   }
+    public class ComparePlayers implements Comparator<Player> {
+
+        @Override
+        public int compare(Player o1, Player o2) {
+            return o2.getScore() - o1.getScore();
+        }
+    }
 
 
-
-
-//    List<Player> timeSecond;
-//    List<Player> timePrime;
-//    List<Player> getTimePrime;
-//
-//    public static List<Player> generateTimeSecond() {
-//     List <Player> timeSecond= new ArrayList<>();
-//    for (Player player: Generator.makePlayer(10,16)) {
-//            timeSecond.add(player);
-//        }
-//       return List.copyOf(timeSecond);
-//
-//    }
-//    public static List<Player> generateFirst() {
-//        List <Player> timeFirst= new ArrayList<>();
-//        for (Player player: Generator.makePlayer(17,31)) {
-//            timeFirst.add(player);
-//        }
-//        return List.copyOf(timeFirst);
-//
-//    }
-//    public static List<Player> generatePrime() {
-//        List <Player> timePrime= new ArrayList<>();
-//        for (Player player: Generator.makePlayer(31,100)) {
-//            timePrime.add(player);
-//        }
-//        return List.copyOf(timePrime);
-//
-//    }
 
 }
+
+
+
+
+
