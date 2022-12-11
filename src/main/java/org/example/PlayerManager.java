@@ -1,13 +1,12 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 
 public class PlayerManager {
     private List<Player> allPlayers;
+    private Map<League, List<Player>> mapAllPlayers;
+    private Set<UUID> uuids;
     static PlayerManager pm = null;
     public List<Player> allPlayersSortByScore = new ArrayList<>();
 
@@ -18,59 +17,84 @@ public class PlayerManager {
     }
 
     private PlayerManager() {
+
         allPlayers = new ArrayList<Player>();
+        mapAllPlayers = new HashMap<>();
+        uuids = new HashSet<>();
+        for (League l : League.values()) {
+            mapAllPlayers.put(l, new ArrayList<>());
+        }
     }
 
 
     public boolean addPlayer(Player player) {
-        for (Player player1 : allPlayers) {
-            if (player.getPlayerId().equals(player1.getPlayerId()))
-                return false;
+        boolean res = false;
+        if (!uuids.contains(player.getPlayerId())) {
+            League league = assignLeague(player);
+            if (league != League.UNDEFINED) {
+                List<Player> players = mapAllPlayers.get(league);
+                players.add(player);
+                uuids.add((player.getPlayerId()));
+                res = true;
+            }
         }
-        if (assignLeague(player))
-            allPlayers.add(player);
-        return true;
+        return res;
     }
 
-    public boolean assignLeague(Player player) {
-        boolean res = true;
-        if (player.getAge() >= 15 && player.getAge() <= 20)
+    private League assignLeague(Player player) {
+        League res = League.UNDEFINED;
+
+        if (player.getAge() >= 15 && player.getAge() <= 20) {
             player.setLeague(League.SECOND);
-        else if (player.getAge() >= 21 && player.getAge() <= 30)
+            res = League.SECOND;
+        } else if (player.getAge() >= 21 && player.getAge() <= 30) {
             player.setLeague(League.FIRST);
-        else if (player.getAge() >= 31 && player.getAge() <= 100)
+            res = League.FIRST;
+        } else if (player.getAge() >= 31 && player.getAge() <= 100) {
             player.setLeague(League.PRIME);
-        else res = false;
+            res = League.PRIME;
+        }
         return res;
 
     }
 
     public List<Player> getPlayersByLeague(League league) {
-        List<Player> playerList = new LinkedList<>();
-        for (Player player : allPlayers) {
-            if (player.getLeague().equals(league))
-                playerList.add(player);
-        }
-        return playerList;
+
+        return new LinkedList<>(mapAllPlayers.get(league));
     }
 
     public List<Player> getAllPlayersSortByScore(List<Player> player) {
-        for (int i = 0; i < player.size() ;i++){
-            allPlayersSortByScore.add(player.get(i));}
-
+        for (int i = 0; i < player.size(); i++) {
+            allPlayersSortByScore.add(player.get(i));
+        }
         allPlayersSortByScore.sort(new ComparePlayers());
-
         return allPlayersSortByScore;
-   }
-    public class ComparePlayers implements Comparator<Player> {
+    }
 
+    public class ComparePlayers implements Comparator<Player> {
         @Override
         public int compare(Player o1, Player o2) {
             return o2.getScore() - o1.getScore();
         }
     }
 
-
+    public boolean changeLeague(Player player, League newLeague) {
+        boolean res = false;
+        if (!player.getLeague().equals(newLeague)) {
+            List<Player> playerLeagueOld = mapAllPlayers.get(player.getLeague());
+            List<Player> playerLeagueNew = mapAllPlayers.get(newLeague);
+            Iterator<Player> it = playerLeagueOld.iterator();
+            while (it.hasNext() && !res) {
+                Player p = it.next();
+                if (p.getPlayerId().equals(player.getPlayerId())) {
+                    it.remove();
+                    playerLeagueNew.add(player);
+                    res = true;
+                }
+            }
+        }
+        return res;
+    }
 
 }
 

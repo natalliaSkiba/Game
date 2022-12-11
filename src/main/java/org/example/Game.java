@@ -40,6 +40,7 @@ public class Game {
     }
 
 
+
     public void changeLeaguePlus(Player player) {
         if (player.getLeague().equals(League.SECOND)) {
             player.setLeague(League.FIRST);
@@ -87,6 +88,18 @@ public class Game {
         if (Math.random() > 0.5)
             p2.addScore(1);
         else p1.addScore(1);
+
+    }
+    public void movePlayerBetweenLeague(Map<League,List<Player>> map){
+    List <Player> leaderList = new LinkedList(map.values());
+    Set<Map.Entry<League,List<Player>>> player = map.entrySet();
+      //  System.out.println("set" +player);
+
+
+//        List <Player> loserList = new LinkedList(map.values());
+//        System.out.println("sort -----" + leaderList);
+        Iterator<Map.Entry<League,List<Player>>> itr = map.entrySet().iterator();
+
 
     }
 }
