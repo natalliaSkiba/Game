@@ -12,7 +12,7 @@ public class Generator {
     public static void makePlayers(League league) {
         Random rnd = new Random();
         Faker faker = new Faker();
-        int max = 10;
+        int max = 25;
 
         if (league.equals(League.SECOND)) {
             for (int i = 0; i < max; i++)

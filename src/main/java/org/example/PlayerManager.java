@@ -8,7 +8,7 @@ public class PlayerManager {
     private Map<League, List<Player>> mapAllPlayers;
     private Set<UUID> uuids;
     static PlayerManager pm = null;
-    public List<Player> allPlayersSortByScore = new ArrayList<>();
+
 
     public static PlayerManager getInstance() {
         if (pm == null)
@@ -63,20 +63,7 @@ public class PlayerManager {
         return new LinkedList<>(mapAllPlayers.get(league));
     }
 
-    public List<Player> getAllPlayersSortByScore(List<Player> player) {
-        for (int i = 0; i < player.size(); i++) {
-            allPlayersSortByScore.add(player.get(i));
-        }
-        allPlayersSortByScore.sort(new ComparePlayers());
-        return allPlayersSortByScore;
-    }
 
-    public class ComparePlayers implements Comparator<Player> {
-        @Override
-        public int compare(Player o1, Player o2) {
-            return o2.getScore() - o1.getScore();
-        }
-    }
 
     public boolean changeLeague(Player player, League newLeague) {
         boolean res = false;

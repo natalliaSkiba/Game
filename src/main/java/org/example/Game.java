@@ -1,11 +1,9 @@
 package org.example;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 
 public class Game {
-    List<Player> leadersList = new ArrayList<>();
-    List<Player> loserList = new ArrayList<>();
-
 
     public void printPlayers(List<Player> players) {
         for (Player player : players) {
@@ -39,67 +37,57 @@ public class Game {
 
     }
 
-
-
-    public void changeLeaguePlus(Player player) {
-        if (player.getLeague().equals(League.SECOND)) {
-            player.setLeague(League.FIRST);
-        } else {
-            if (player.getLeague().equals(League.FIRST)) {
-                player.setLeague(League.PRIME);
-            }
-        }
-    }
-
-
-    public void changeLeagueMinus(Player player) {
-
-        if (player.getLeague().equals(League.PRIME))
-            player.setLeague(League.FIRST);
-
-        else if (player.getLeague().equals(League.FIRST))
-            player.setLeague(League.SECOND);
-
-    }
-
-
-    public List<Player> getLeaders(List<Player> players) {
-
-        for (int i = 0; i < 3; i++) {
-            leadersList.add(players.get(i));
-            changeLeaguePlus(players.get(i));
-        }
-
-        return leadersList;
-    }
-
-    public List<Player> getLosers(List<Player> players) {
-
-        int j = players.size() - 3;
-        int k = players.size() ;
-        for (int i = j; i < k; i++) {
-            loserList.add(players.get(i));
-            changeLeagueMinus(players.get(i));
-        }
-        return loserList;
-    }
-
     public void resultGame(Player p1, Player p2) {
         if (Math.random() > 0.5)
             p2.addScore(1);
         else p1.addScore(1);
 
     }
-    public void movePlayerBetweenLeague(Map<League,List<Player>> map){
-    List <Player> leaderList = new LinkedList(map.values());
-    Set<Map.Entry<League,List<Player>>> player = map.entrySet();
-      //  System.out.println("set" +player);
 
+    public void movePlayerBetweenLeague(Map<League, List<Player>> map) {
+        Map<League, List<Player>> leaders = new HashMap<>();
+        List<Player> leadersList = new ArrayList<>();
+        List<Player> losersList = new ArrayList<>();
+        for (Map.Entry<League, List<Player>> player : map.entrySet()) {
+            if (player.getKey().equals(League.SECOND))
+                for (int i = 0; i < 3; i++) {
+                    PlayerManager.getInstance().changeLeague(map.get(League.SECOND).get(i), League.FIRST);
+                    leadersList.add(map.get(League.SECOND).get(i));
+                    map.get(League.SECOND).get(i).setLeague(League.FIRST);
 
-//        List <Player> loserList = new LinkedList(map.values());
-//        System.out.println("sort -----" + leaderList);
-        Iterator<Map.Entry<League,List<Player>>> itr = map.entrySet().iterator();
+                }
+            if (player.getKey().equals(League.FIRST))
+                for (int i = 0; i < 3; i++) {
+                    PlayerManager.getInstance().changeLeague(map.get(League.FIRST).get(i), League.PRIME);
+                    leadersList.add(map.get(League.FIRST).get(i));
+                    map.get(League.FIRST).get(i).setLeague(League.PRIME);
+                }
 
+            if (player.getKey().equals(League.FIRST))
+                for (int i = map.get(League.FIRST).size() - 3; i < map.get(League.FIRST).size(); i++) {
+                    PlayerManager.getInstance().changeLeague(map.get(League.FIRST).get(i), League.SECOND);
+                    losersList.add(map.get(League.FIRST).get(i));
+                    map.get(League.FIRST).get(i).setLeague(League.SECOND);
+                }
+            if (player.getKey().equals(League.PRIME))
+                for (int i = map.get(League.PRIME).size() - 3; i < map.get(League.PRIME).size(); i++) {
+                    PlayerManager.getInstance().changeLeague(map.get(League.PRIME).get(i), League.FIRST);
+                    losersList.add(map.get(League.PRIME).get(i));
+                    map.get(League.PRIME).get(i).setLeague(League.FIRST);
+                }
+        }
+        System.out.println("______Leaders________");
 
+        printPlayers(leadersList);
+        System.out.println("______Losers________");
+        printPlayers(losersList);
+        System.out.println("________sort leaders by scores ");
+        Collections.sort(leadersList, new Comparator<Player>() {
+            @Override
+            public int compare(Player o1, Player o2) {
+                return o2.getScore() - o1.getScore();
+            }
+        });
+        printPlayers(leadersList);
     }
 }

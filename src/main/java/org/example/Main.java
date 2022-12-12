@@ -15,17 +15,19 @@ public class Main {
 
         Map<League, List<Player> >playerMap = new HashMap<>();
 
-        for (int i = 1; i <= 2; i++) {
+        for (int i = 1; i <= 5; i++) {
             System.out.println("Game " + i);
 
                 for (League league: League.values()){
+                    if (league != League.UNDEFINED) {
                     List<Player> players =  PlayerManager.getInstance().getPlayersByLeague(league);
                     System.out.println(league);
                     game.makeGame(players);
                     playerMap.put(league,players);
-                }
+                }}
+            game.movePlayerBetweenLeague(playerMap);
       }
-        System.out.println("*******" + playerMap);
-        game.movePlayerBetweenLeague(playerMap);
+
+
     }
 }
