@@ -12,7 +12,6 @@ public class Main {
         Generator.makePlayers(League.FIRST);
         Generator.makePlayers(League.SECOND);
         Generator.makePlayers(League.PRIME);
-
         Map<League, List<Player> >playerMap = new HashMap<>();
 
         for (int i = 1; i <= 5; i++) {
@@ -27,7 +26,5 @@ public class Main {
                 }}
             game.movePlayerBetweenLeague(playerMap);
       }
-
-
     }
 }

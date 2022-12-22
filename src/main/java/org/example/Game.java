@@ -10,7 +10,6 @@ public class Game {
             System.out.println(String.format
                     ("Player name: %s,  year: %d , score: %d , league %s",
                             player.getName(), player.getAge(), player.getScore(), player.getLeague()));
-
         }
     }
 
@@ -37,7 +36,7 @@ public class Game {
 
     }
 
-    public void resultGame(Player p1, Player p2) {
+    void resultGame(Player p1, Player p2) {
         if (Math.random() > 0.5)
             p2.addScore(1);
         else p1.addScore(1);
@@ -45,24 +44,26 @@ public class Game {
     }
 
     public void movePlayerBetweenLeague(Map<League, List<Player>> map) {
-        Map<League, List<Player>> leaders = new HashMap<>();
         List<Player> leadersList = new ArrayList<>();
         List<Player> losersList = new ArrayList<>();
         for (Map.Entry<League, List<Player>> player : map.entrySet()) {
-            if (player.getKey().equals(League.SECOND))
-                for (int i = 0; i < 3; i++) {
-                    PlayerManager.getInstance().changeLeague(map.get(League.SECOND).get(i), League.FIRST);
-                    leadersList.add(map.get(League.SECOND).get(i));
-                    map.get(League.SECOND).get(i).setLeague(League.FIRST);
+            for (League league : League.values()) {
+                if (league != League.UNDEFINED)
+                    if (player.getKey().equals(league))
+                        for (int i = 0; i < 3; i++) {
+                            int val = league.ordinal() +1;
 
-                }
+                            PlayerManager.getInstance().changeLeague(map.get(league).get(i), League.ordinal(0));
+                            leadersList.add(map.get(league).get(i));
+
+                        }
+            }
             if (player.getKey().equals(League.FIRST))
                 for (int i = 0; i < 3; i++) {
                     PlayerManager.getInstance().changeLeague(map.get(League.FIRST).get(i), League.PRIME);
                     leadersList.add(map.get(League.FIRST).get(i));
                     map.get(League.FIRST).get(i).setLeague(League.PRIME);
                 }
-
             if (player.getKey().equals(League.FIRST))
                 for (int i = map.get(League.FIRST).size() - 3; i < map.get(League.FIRST).size(); i++) {
                     PlayerManager.getInstance().changeLeague(map.get(League.FIRST).get(i), League.SECOND);

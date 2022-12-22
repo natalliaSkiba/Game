@@ -1,16 +1,18 @@
 package org.example;
 
 import com.github.javafaker.Name;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.util.UUID;
 
 public class Player {
+    @Getter
     private String name;
     private UUID playerId;
     private int age;
-    League league;
+    private League league;
     private int score = 0;
-
 
     public Player(UUID playerId, String name, int age, League league) {
         this.playerId = playerId;
@@ -25,42 +27,11 @@ public class Player {
         this.age = age;
     }
 
-    public UUID getPlayerId() {
-        return playerId;
-    }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public League getLeague() {
-        return league;
-    }
-
-    public  int getScore(){
-        return score;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
 
     public void setLeague(League league) {
         this.league = league;
     }
-
 
     @Override
     public String toString() {

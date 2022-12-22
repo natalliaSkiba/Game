@@ -2,13 +2,11 @@ package org.example;
 
 import java.util.*;
 
-
 public class PlayerManager {
     private List<Player> allPlayers;
     private Map<League, List<Player>> mapAllPlayers;
     private Set<UUID> uuids;
     static PlayerManager pm = null;
-
 
     public static PlayerManager getInstance() {
         if (pm == null)
@@ -17,7 +15,6 @@ public class PlayerManager {
     }
 
     private PlayerManager() {
-
         allPlayers = new ArrayList<Player>();
         mapAllPlayers = new HashMap<>();
         uuids = new HashSet<>();
@@ -26,8 +23,7 @@ public class PlayerManager {
         }
     }
 
-
-    public boolean addPlayer(Player player) {
+    public  boolean addPlayer(Player player) {
         boolean res = false;
         if (!uuids.contains(player.getPlayerId())) {
             League league = assignLeague(player);
@@ -63,8 +59,6 @@ public class PlayerManager {
         return new LinkedList<>(mapAllPlayers.get(league));
     }
 
-
-
     public boolean changeLeague(Player player, League newLeague) {
         boolean res = false;
         if (!player.getLeague().equals(newLeague)) {
@@ -76,12 +70,14 @@ public class PlayerManager {
                 if (p.getPlayerId().equals(player.getPlayerId())) {
                     it.remove();
                     playerLeagueNew.add(player);
+                    player.setLeague(newLeague);
                     res = true;
                 }
             }
         }
         return res;
     }
+
 
 }
 
